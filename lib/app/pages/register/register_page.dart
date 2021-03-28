@@ -24,7 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New task'),
+        title: _task.id != null ? Text('Edit task') : Text('New task'),
       ),
       body: SingleChildScrollView(
         child: Padding(
