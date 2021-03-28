@@ -1,16 +1,25 @@
-# todo
+# Todo
 
-A new Flutter project.
+# Sobre o projeto
 
-## Getting Started
+ ToDo é uma aplicação simples para guardar as suas tarefas diárias para não perder nada.
 
-This project is a starting point for a Flutter application.
+## Screenshots
+<img src="https://github.com/Joao3run/todo/blob/master/assets/img/home.png" alt="Imagem tela todo" width="300" height="700" hspace="20"> <img src="https://github.com/Joao3run/todo/blob/master/assets/img/register.png"  alt="Imagem tela todo" width="300" height="700">
 
-A few resources to get you started if this is your first Flutter project:
+# Como executar o projeto
+Pré-requisitos: SDK Flutter
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```bash
+# clonar repositório
+git clone https://github.com/Joao3run/todo
+# instalar dependências
+flutter pub get
+# executar o projeto
+flutter run
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Autor
+
+João Brun
+
