@@ -43,12 +43,10 @@ class GenericTextFormField extends StatelessWidget {
       },
       onSaved: onSaved,
       onChanged: (_) {
-        print('Typing');
         if (timer != null) {
           timer!.cancel();
         }
         timer = Timer(Duration(milliseconds: 500), () {
-          print('Stopped typing');
           formKey!.currentState!.validate();
         });
       },
