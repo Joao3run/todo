@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:todo/app/pages/home/home_controller.dart';
 import 'package:todo/app/pages/register/register_page.dart';
 import 'package:todo/app/shared/components/card.dart';
 import 'package:todo/app/shared/models/task.dart';
+import 'package:todo/app/shared/repositories/task/task_repository_impl.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,20 +14,59 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Task> tasks = [];
 
+  final HomeController controller = HomeController(
+    TaskRepositoryImpl(FirebaseFirestore.instance),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    controller.listAllTask();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('TODO'),
       ),
-      body: ListView.builder(
-        itemCount: tasks.length,
-        itemBuilder: (context, index) => CardComponent(
-          task: tasks[index],
-          editTask: editTask,
-          deleteTask: showAlert,
-          doneTask: doneTask,
+      body: RefreshIndicator(
+        child: FutureBuilder(
+          builder: (_, __) {
+            return ValueListenableBuilder(
+              builder: (_, __, ___) {
+                if (controller.isLoading.value) {
+                  return Container(
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [CircularProgressIndicator()],
+                    ),
+                  );
+                }
+                return ValueListenableBuilder(
+                  builder: (_, __, ___) {
+                    return ListView.builder(
+                      itemCount: controller.tasks.value.length,
+                      itemBuilder: (context, index) => CardComponent(
+                        task: controller.tasks.value[index],
+                        editTask: editTask,
+                        deleteTask: showAlert,
+                        doneTask: doneTask,
+                      ),
+                    );
+                  },
+                  valueListenable: controller.tasks,
+                );
+              },
+              valueListenable: controller.isLoading,
+            );
+          },
         ),
+        onRefresh: () {
+          return controller.listAllTask();
+        },
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -34,9 +76,7 @@ class _HomePageState extends State<HomePage> {
               return RegisterPage(listSize: tasks.length);
             }),
           );
-          setState(() {
-            tasks.add(task!);
-          });
+          controller.addTask(task!);
         },
       ),
     );
@@ -48,34 +88,14 @@ class _HomePageState extends State<HomePage> {
         return RegisterPage(listSize: tasks.length, task: task);
       }),
     );
-
-    int index = tasks.indexWhere((element) => element.id == taskUpdated!.id);
-    tasks[index].title = taskUpdated!.title;
-    tasks[index].description = taskUpdated.description;
-    tasks[index] = taskUpdated;
-    setState(() {
-      tasks = tasks;
-    });
+    controller.changeTask(taskUpdated!);
   }
 
-  deleteTask(int id) {
-    int index = tasks.indexWhere((element) => element.id == id);
-    Navigator.pop(context);
-    tasks.removeAt(index);
-    setState(() {
-      tasks = tasks;
-    });
+  doneTask(String id) {
+    controller.doneTask(id);
   }
 
-  doneTask(int id) {
-    int index = tasks.indexWhere((element) => element.id == id);
-    tasks[index].done = true;
-    setState(() {
-      tasks = tasks;
-    });
-  }
-
-  showAlert(int id) {
+  showAlert(String id) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -96,7 +116,8 @@ class _HomePageState extends State<HomePage> {
           ),
           TextButton(
             onPressed: () {
-              deleteTask(id);
+              controller.delete(id);
+              Navigator.pop(context);
             },
             child: Text('Ok'),
           ),
