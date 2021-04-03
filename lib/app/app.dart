@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo/app/pages/home/home_page.dart';
+import 'package:todo/app/pages/splash/splash_page.dart';
 
 class App extends StatelessWidget {
   @override
@@ -18,7 +18,7 @@ class App extends StatelessWidget {
           color: Colors.white,
         ),
       ),
-      home: HomePage(),
+      home: SplashPage(),
     );
   }
 }
