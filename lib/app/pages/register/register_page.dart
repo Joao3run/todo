@@ -70,9 +70,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void _save() {
     if (_formKey.currentState!.validate()) {
-      if (_task.id == null) {
-        _task.id = widget.listSize + 1;
-      }
       _formKey.currentState!.save();
       Navigator.of(context).pop<Task>(_task);
     }
