@@ -45,11 +45,13 @@ class CardComponent extends StatelessWidget {
                   child: Container(
                     width: 150,
                     child: task.done
-                        ? Text(
-                            'Done'.toUpperCase(),
-                            style: TextStyle(
-                              fontSize: 24,
-                              color: Colors.green,
+                        ? Center(
+                            child: Text(
+                              'Done'.toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: Colors.green,
+                              ),
                             ),
                           )
                         : Row(
@@ -83,8 +85,6 @@ class CardComponent extends StatelessWidget {
                                       icon: Icon(Icons.delete),
                                       color: Colors.white,
                                       onPressed: () {
-                                        print(task.id);
-                                        print('card');
                                         deleteTask(task.id);
                                       },
                                     ),
