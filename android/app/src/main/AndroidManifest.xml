@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.brn.todo">
    <application
+        android:usesCleartextTraffic="true"
         android:label="todo"
         android:icon="@mipmap/ic_launcher">
         <activity
